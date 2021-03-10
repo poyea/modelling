@@ -58,15 +58,18 @@ class Extractor:
 
     def get_confirmed(self, start_date, country):
         df = pd.read_csv('confirmed.csv')
-        country_df = df[df['Country/Region'] == country]
-        return country_df.iloc[0].loc[start_date:]
+        country_df = df[df['Country/Region'] == country].iloc[0].loc[start_date:]
+        country_df.index = pd.to_datetime(country_df.index)
+        return country_df
 
     def get_recovered(self, start_date, country):
         df = pd.read_csv('recovered.csv')
-        country_df = df[df['Country/Region'] == country]
-        return country_df.iloc[0].loc[start_date:]
+        country_df = df[df['Country/Region'] == country].iloc[0].loc[start_date:]
+        country_df.index = pd.to_datetime(country_df.index)
+        return country_df
 
     def get_dead(self, start_date, country):
         df = pd.read_csv('deaths.csv')
-        country_df = df[df['Country/Region'] == country]
-        return country_df.iloc[0].loc[start_date:]
+        country_df = df[df['Country/Region'] == country].iloc[0].loc[start_date:]
+        country_df.index = pd.to_datetime(country_df.index)
+        return country_df
