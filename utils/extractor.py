@@ -73,3 +73,7 @@ class Extractor:
         country_df = df[df['Country/Region'] == country].iloc[0].loc[start_date:]
         country_df.index = pd.to_datetime(country_df.index)
         return country_df
+
+if __name__ == "__main__":
+    extractor = Extractor()
+    extractor.merge()
