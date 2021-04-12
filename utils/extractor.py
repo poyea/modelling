@@ -11,16 +11,19 @@ class Extractor:
             csv_writer = csv.writer(write_obj)
             lines = [line for line in csv_reader]
             ix = 0
+            skipped_place = None
             for i in range(len(lines)):
-                if i + 1 < len(lines) and lines[i + 1][0] == 'Hong Kong':
+                if i + 1 < len(lines) and lines[i + 1][0] in self.skip_list:
+                    skipped_place = lines[i + 1][0]
                     country_temp = lines[i + 1][1]
-                    lines[i + 1][1] = 'Hong Kong'
+                    lines[i + 1][1] = skipped_place
                     csv_writer.writerow(lines[i + 1])
                     lines[i + 1][1] = country_temp
                 elif i + 1 < len(lines) and lines[i][1] == lines[i + 1][1]:
                     ix = i if ix == 0 else ix
                     lines[ix][4:] = np.asfarray(lines[ix][4:], float) + np.asfarray(lines[i + 1][4:], float)
                 else:
+                    skipped_place = None
                     if ix > 0:
                         lines[ix][0] = ""
                         csv_writer.writerow(lines[ix])
@@ -50,6 +53,7 @@ class Extractor:
         self.confirmed = None
         self.recovered = None
         self.dead = None
+        self.skip_list = ["Hong Kong", "Beijing"]
 
     def merge(self):
         self.merge_cities(self.confirmed_loc, "confirmed.csv")
